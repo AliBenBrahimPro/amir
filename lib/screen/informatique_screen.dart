@@ -123,7 +123,8 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
                         ];
                       },
                       body: _foundInfo.isNotEmpty
-                          ? Container(
+                          ? 
+                          Container(
                               color: Colors.white,
                               child: ListView.builder(
                                 itemCount: _foundInfo.length,

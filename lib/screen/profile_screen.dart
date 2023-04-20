@@ -43,9 +43,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     emailcontroller.text =
         Provider.of<Auth>(context, listen: false).user!.email;
     lastNameController.text =
-        Provider.of<Auth>(context, listen: false).user!.last_name;
+        Provider.of<Auth>(context, listen: false).user!.lastName;
     nameController.text =
-        Provider.of<Auth>(context, listen: false).user!.first_name;
+        Provider.of<Auth>(context, listen: false).user!.firstName;
     token = await _storage.read(key: 'token');
     id = await _storage.read(key: 'id');
   }

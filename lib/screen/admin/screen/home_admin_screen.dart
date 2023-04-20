@@ -3,35 +3,30 @@ import 'package:amir/models/user_model.dart';
 import 'package:amir/screen/ColorScheme.dart';
 import 'package:amir/screen/all_course.dart';
 import 'package:amir/screen/chat.dart';
-import 'package:amir/screen/cours_screen.dart';
-import 'package:amir/screen/informatique_screen.dart';
-import 'package:amir/screen/profile_screen.dart';
-import 'package:amir/screen/three_screen.dart';
-import 'package:amir/screen/two_screen.dart';
 import 'package:amir/widgets/qustion_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-import 'account.dart';
+import 'gestion_screen.dart';
 
-class NavigationScreen extends StatefulWidget {
-  const NavigationScreen({super.key});
+
+class HomeAdmin extends StatefulWidget {
+  const HomeAdmin({super.key});
 
   @override
-  State<NavigationScreen> createState() => _NavigationScreenState();
+  State<HomeAdmin> createState() => _HomeAdminState();
 }
 
-class _NavigationScreenState extends State<NavigationScreen> {
+class _HomeAdminState extends State<HomeAdmin> {
 
   late List<UsersModel> users = [];
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
-    const CoursScreen(),
+    const GestionAdmin(),
     const AllCourse(),
     const QuestionWidget(),
     const ChatPage(),
-     const AccountPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -203,7 +198,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.format_list_bulleted),
-            label: 'Cours',
+            label: 'Gestion',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),

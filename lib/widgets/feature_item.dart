@@ -46,30 +46,6 @@ class FeatureItem extends StatelessWidget {
               radius: 15,
             ),
             Positioned(
-              top: 170,
-              right: 15,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: primary,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: shadowColor.withOpacity(0.05),
-                      spreadRadius: 1,
-                      blurRadius: 1,
-                      offset: Offset(0, 0),
-                    ),
-                  ],
-                ),
-                child: Text(
-                  data["price"],
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w500),
-                ),
-              ),
-            ),
-            Positioned(
               top: 210,
               child: Container(
                 width: width - 20,
@@ -99,10 +75,6 @@ class FeatureItem extends StatelessWidget {
                         ),
                         getAttribute(Icons.schedule_rounded, labelColor,
                             data["duration"]),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        getAttribute(Icons.star, yellow, data["review"]),
                       ],
                     ),
                   ],

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -32,9 +33,10 @@ class _SplashScreenState extends State<SplashScreen> {
   void readToken() async {
     String? token = await _storage.read(key: 'token');
     String? id = await _storage.read(key: 'id');
+    log(token.toString());
     token == null
-        ? Get.toNamed("/login") 
-        : Provider.of<Auth>(context,listen: false).tryToken(token, id);
+        ? Get.toNamed("/login")
+        : Provider.of<Auth>(context, listen: false).tryToken(token, id);
   }
 
   @override

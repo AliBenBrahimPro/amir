@@ -22,11 +22,21 @@ class Auth extends ChangeNotifier {
       if (response.statusCode == 200) {
         String token = response.data['token'];
         String id = response.data['data']['_id'];
+        String role = response.data['data']['role'];
+
         tryToken(token, id);
         _isLoggedIn = true;
         Get.snackbar("Bienvenue", "connectez-vous avec succès",
             backgroundColor: Colors.green , colorText: Colors.white);
-        Get.toNamed('/homepage');
+              if (role == "eleve") {
+              Get.offAllNamed('/homepage');
+            } else if(role == "admin") {
+              Get.offAllNamed('/adminhome');
+              
+            }else{
+               Get.offAllNamed('/enseignehome');
+            }
+        
 
         notifyListeners();
       } else if (response.statusCode == 401) {
@@ -66,7 +76,6 @@ class Auth extends ChangeNotifier {
         
         Get.snackbar("Succès", "félicitations votre compte a été créé avec succès",
             backgroundColor: Colors.green , colorText: Colors.white);
-        Get.toNamed('/login');
 
         notifyListeners();
       } else {
@@ -87,10 +96,18 @@ class Auth extends ChangeNotifier {
         Dio.Response response = await dio().get('/users/${id}',
             options:
                 Dio.Options(headers: {'Authorization': 'Bearer ${token}'}));
+       String role = response.data['data']['role'];
         _isLoggedIn = true;
         _user = UsersModel.fromJson(response.data['data']);
         storeToken(token,id);
-        Get.toNamed('/homepage');
+       if (role == "eleve") {
+              Get.offAllNamed('/homepage');
+            } else if(role == "admin") {
+              Get.offAllNamed('/adminhome');
+              
+            }else{
+               Get.offAllNamed('/enseignehome');
+            }
         notifyListeners();
 
       } catch (e) {
