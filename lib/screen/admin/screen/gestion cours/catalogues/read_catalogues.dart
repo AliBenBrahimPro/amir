@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:amir/screen/test.dart';
+import 'package:amir/screen/admin/screen/gestion%20cours/catalogues/create_catalogue.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../../theme.dart';
 import '../../../../../Services/catalogues_services.dart';
 import '../../../../../models/catalogues_model.dart';
-
+import '../menu_cours_screen.dart';
+import 'update_catalogues.dart';
 
 class ReadCatalogues extends StatefulWidget {
   const ReadCatalogues({super.key});
@@ -21,8 +22,7 @@ class _ReadCataloguesState extends State<ReadCatalogues> {
   List<Catalogues> users = [];
   CataloguesController caloguesController = CataloguesController();
   List<Catalogues> _foundInfo = [];
-  final bool _sortAscending = true;
-  var IsLoaded = true;
+  bool isLoaded = true;
   @override
   void initState() {
     super.initState();
@@ -265,7 +265,7 @@ class _ReadCataloguesState extends State<ReadCatalogues> {
   getData() async {
     users = await caloguesController.getAllcatalogues();
     setState(() {
-      IsLoaded = false;
+      isLoaded = false;
       _foundInfo = users;
     });
   }
@@ -275,17 +275,22 @@ class _ReadCataloguesState extends State<ReadCatalogues> {
     return Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-       Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const Test()),
-                );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreateCatalogue()),
+            );
           },
-          child: const Icon(Icons.add),
-          backgroundColor: pink, //<-- SEE HERE
+          backgroundColor: pink,
+          child: const Icon(Icons.add), //<-- SEE HERE
         ),
         appBar: AppBar(
           backgroundColor: pink,
+          leading: BackButton(
+            onPressed: () => Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const MenuCours()),
+            ),
+          ),
           title: const Text("Gestion de catalogues"),
         ),
         body: RefreshIndicator(
@@ -296,11 +301,12 @@ class _ReadCataloguesState extends State<ReadCatalogues> {
               });
             },
             child: Visibility(
-                visible: !IsLoaded,
+                visible: !isLoaded,
                 replacement: const Center(
                   child: CircularProgressIndicator(),
                 ),
-                child: Column(children: [
+                child:
+                 Column(children: [
                   getSearchBarUI(),
                   getFilterBarUI(),
                   Expanded(
@@ -318,7 +324,10 @@ class _ReadCataloguesState extends State<ReadCatalogues> {
                           children: [
                             IconButton(
                                 onPressed: () {
-                        
+                                  Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>  EditCatalogue(catalogues: item,)),
+            );
                                 },
                                 icon: const Icon(
                                   Icons.edit,
@@ -326,7 +335,7 @@ class _ReadCataloguesState extends State<ReadCatalogues> {
                                 )),
                             IconButton(
                                 onPressed: () {
-                                  caloguesController.deleteUser(item.id);
+                                  caloguesController.deleteCatalogues(item.id);
                                   setState(() {
                                     _foundInfo.removeWhere(
                                         (element) => element.id == item.id);
@@ -338,11 +347,12 @@ class _ReadCataloguesState extends State<ReadCatalogues> {
                                 ))
                           ],
                         ),
-                        leading: const Icon(Icons.delete, color: Colors.red),
                         onTap: () {},
                       );
                     },
                   )),
-                ]))));
+                ])
+                )
+                ));
   }
 }

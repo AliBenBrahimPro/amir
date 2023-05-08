@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">amir</string>
+    <string name="facebook_app_id">142927291979197</string>
+    <string name="fb_login_protocol_scheme">fb142927291979197</string>
+    <string name="facebook_client_token">923798607b8d16bb4013adc67f6f366a</string>
+</resources>

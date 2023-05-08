@@ -54,11 +54,11 @@ class CataloguesController {
     }
   }
 
-  Future deleteUser(String id) async {
+  Future deleteCatalogues(String id) async {
     try {
-      Dio.Response response = await dio().delete('/users/$id');
+      Dio.Response response = await dio().delete('/catalogues/$id');
       if (response.statusCode == 204) {
-        Get.snackbar("success", "utilisateur a étes suprimer",
+        Get.snackbar("success", "catalogues a étes suprimer",
             backgroundColor: Colors.green, colorText: Colors.white);
         //return true;
       } else {

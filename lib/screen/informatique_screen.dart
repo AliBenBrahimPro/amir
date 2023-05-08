@@ -7,10 +7,13 @@ import 'package:amir/screen/video_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../Services/domaines_services.dart';
+import '../models/domaines_model.dart';
 import '../models/informatique_list_data.dart';
 
 class InformatiqueHomeScreen extends StatefulWidget {
-  const InformatiqueHomeScreen({super.key});
+  final String idCatalog;
+  const InformatiqueHomeScreen({super.key, required this.idCatalog});
 
   @override
   _InformatiqueHomeScreenState createState() => _InformatiqueHomeScreenState();
@@ -19,19 +22,32 @@ class InformatiqueHomeScreen extends StatefulWidget {
 class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
     with TickerProviderStateMixin {
   AnimationController? animationController;
-  List<InformatiqueListData> informatiqueList = InformatiqueListData.informatiqueList;
+  List<InformatiqueListData> informatiqueList =
+      InformatiqueListData.informatiqueList;
+
   final ScrollController _scrollController = ScrollController();
 
   DateTime startDate = DateTime.now();
   DateTime endDate = DateTime.now().add(const Duration(days: 5));
   List<InformatiqueListData> _foundInfo = [];
   bool _sortAscending = true;
+  DomainesController domainesController = DomainesController();
+  List<Domaines> domaines = [];
+  bool isDomainesLoaded = true;
+   getSpecificsDomaines(String? id) async {
+    domaines = await domainesController.getSpecDomaines(id);
+    setState(() {
+      isDomainesLoaded = false;
+    });
+  }
+
   @override
   void initState() {
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
     _foundInfo = informatiqueList;
     _sortNew(false);
+    getSpecificsDomaines(widget.idCatalog);
     super.initState();
   }
 
@@ -93,7 +109,9 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
           backgroundColor: pink,
           elevation: 0,
         ),
-        body: Stack(
+        body: isDomainesLoaded?    Center(
+                                  child: CircularProgressIndicator(),
+                                ): Stack(
           children: <Widget>[
             InkWell(
               splashColor: Colors.transparent,
@@ -109,66 +127,62 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
                   getSearchBarUI(),
                   Expanded(
                     child: NestedScrollView(
-                      controller: _scrollController,
-                      headerSliverBuilder:
-                          (BuildContext context, bool innerBoxIsScrolled) {
-                        return <Widget>[
-                          SliverPersistentHeader(
-                            pinned: true,
-                            floating: true,
-                            delegate: ContestTabHeader(
-                              getFilterBarUI(),
+                        controller: _scrollController,
+                        headerSliverBuilder:
+                            (BuildContext context, bool innerBoxIsScrolled) {
+                          return <Widget>[
+                            SliverPersistentHeader(
+                              pinned: true,
+                              floating: true,
+                              delegate: ContestTabHeader(
+                                getFilterBarUI(),
+                              ),
                             ),
-                          ),
-                        ];
-                      },
-                      body: _foundInfo.isNotEmpty
-                          ? 
-                          Container(
-                              color: Colors.white,
-                              child: ListView.builder(
-                                itemCount: _foundInfo.length,
-                                padding: const EdgeInsets.only(top: 8),
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final int count = _foundInfo.length > 10
-                                      ? 10
-                                      : _foundInfo.length;
-                                  final Animation<double> animation =
-                                      Tween<double>(begin: 0.0, end: 1.0)
-                                          .animate(CurvedAnimation(
-                                              parent: animationController!,
-                                              curve: Interval(
-                                                  (1 / count) * index, 1.0,
-                                                  curve:
-                                                      Curves.fastOutSlowIn)));
-                                  animationController?.forward();
-                                  return InformatiqueListView(
-                                    callback: () {
-                                      Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) =>  CoursePage()),
-  );
+                          ];
+                        },
+                        body:   Container(
+                                  color: Colors.white,
+                                  child: ListView.builder(
+                                    itemCount: domaines.length,
+                                    padding: const EdgeInsets.only(top: 8),
+                                    scrollDirection: Axis.vertical,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      final int count = domaines.length > 10
+                                          ? 10
+                                          : domaines.length;
+                                      final Animation<double> animation =
+                                          Tween<double>(begin: 0.0, end: 1.0)
+                                              .animate(CurvedAnimation(
+                                                  parent: animationController!,
+                                                  curve: Interval(
+                                                      (1 / count) * index, 1.0,
+                                                      curve: Curves
+                                                          .fastOutSlowIn)));
+                                      animationController?.forward();
+                                      
+                                      return InformatiqueListView(
+                                        callback: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CoursePage()),
+                                          );
+                                        },
+                                        informatiqueData: domaines[index],
+                                        animation: animation,
+                                        animationController:
+                                            animationController!,
+                                      );
                                     },
-                                    
-                                    informatiqueData: _foundInfo[index],
-                                    animation: animation,
-                                    animationController: animationController!,
-                                    
-
-                                  );
-                                },
-                              ),
-                            )
-                          : const Center(
-                              child: Text(
-                                'No results found',
-                                style: TextStyle(
-                                    fontSize: 24, fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                    ),
-                  )
+                                  ),
+                                )
+                    ))
+                                 
+                              
+                          
+                  
                 ],
               ),
             ),
@@ -200,11 +214,11 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
                   return const SizedBox();
                 } else {
                   return ListView.builder(
-                    itemCount: informatiqueList.length,
+                    itemCount: domaines.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (BuildContext context, int index) {
                       final int count =
-                          informatiqueList.length > 10 ? 10 : informatiqueList.length;
+                          domaines.length > 10 ? 10 : domaines.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                               CurvedAnimation(
@@ -215,7 +229,7 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
 
                       return InformatiqueListView(
                         callback: () {},
-                        informatiqueData: informatiqueList[index],
+                        informatiqueData: domaines[index],
                         animation: animation,
                         animationController: animationController!,
                       );
@@ -227,32 +241,6 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
           )
         ],
       ),
-    );
-  }
-
-  Widget getInformatiqueViewList() {
-    final List<Widget> informatiqueListViews = <Widget>[];
-    for (int i = 0; i < informatiqueList.length; i++) {
-      final int count = informatiqueList.length;
-      final Animation<double> animation =
-          Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController!,
-          curve: Interval((1 / count) * i, 1.0, curve: Curves.fastOutSlowIn),
-        ),
-      );
-      informatiqueListViews.add(
-        InformatiqueListView(
-          callback: () {},
-          informatiqueData: informatiqueList[i],
-          animation: animation,
-          animationController: animationController!,
-        ),
-      );
-    }
-    animationController?.forward();
-    return Column(
-      children: informatiqueListViews,
     );
   }
 
@@ -361,7 +349,7 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '${_foundInfo.length} cours disponible',
+                      '${domaines.length} cours disponible',
                       style: TextStyle(
                         fontWeight: FontWeight.w100,
                         fontSize: 16,

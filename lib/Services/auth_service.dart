@@ -31,7 +31,7 @@ class Auth extends ChangeNotifier {
               if (role == "eleve") {
               Get.offAllNamed('/homepage');
             } else if(role == "admin") {
-              Get.offAllNamed('/adminhome');
+              Get.offAllNamed('/gestionadmin');
               
             }else{
                Get.offAllNamed('/enseignehome');
@@ -103,7 +103,7 @@ class Auth extends ChangeNotifier {
        if (role == "eleve") {
               Get.offAllNamed('/homepage');
             } else if(role == "admin") {
-              Get.offAllNamed('/adminhome');
+              Get.offAllNamed('/gestionadmin');
               
             }else{
                Get.offAllNamed('/enseignehome');

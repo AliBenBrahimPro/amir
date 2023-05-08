@@ -1,3 +1,4 @@
+import 'package:amir/models/domaines_model.dart';
 import 'package:amir/models/informatique_list_data.dart';
 import 'package:amir/screen/ColorScheme.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class InformatiqueListView extends StatelessWidget {
       : super(key: key);
 
   final VoidCallback? callback;
-  final InformatiqueListData? informatiqueData;
+  final Domaines? informatiqueData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -45,6 +46,7 @@ class InformatiqueListView extends StatelessWidget {
                     ],
                   ),
                   child: ClipRRect(
+                    
                     borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                     child: Stack(
                       children: <Widget>[
@@ -54,8 +56,8 @@ class InformatiqueListView extends StatelessWidget {
                               aspectRatio: 2,
                               child: Container(
                                 color: Colors.white,
-                                child: Image.asset(
-                                  informatiqueData!.imagePath,
+                                child: Image.network(
+                                 "http://10.0.2.2:8000/${informatiqueData?.image}",
                                   fit: BoxFit.fitHeight,
                                 ),
                               ),
@@ -84,28 +86,11 @@ class InformatiqueListView extends StatelessWidget {
                                                     .spaceBetween,
                                             children: [
                                               Text(
-                                                informatiqueData!.titleTxt,
+                                                informatiqueData!.nameDomain,
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 22,
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.only(
-                                                        right: 16,
-                                                        top: 8,
-                                                        bottom: 8),
-                                                child: Text(
-                                                  "Created :" +
-                                                      informatiqueData!.createdAt,
-                                                  textAlign: TextAlign.left,
-                                                  style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w400,
-                                                    fontSize: 18,
-                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -114,7 +99,7 @@ class InformatiqueListView extends StatelessWidget {
                                             direction: Axis.vertical,
                                             children: <Widget>[
                                               Text(
-                                                informatiqueData!.subTxt,
+                                                informatiqueData!.certificate,
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     color: Colors.black

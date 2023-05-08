@@ -2,6 +2,9 @@ import 'package:amir/screen/admin/screen/read_account.dart';
 import 'package:flutter/material.dart';
 import 'package:amir/screen/ColorScheme.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+
+import '../../../Services/auth_service.dart';
 
 class GestionAdmin extends StatefulWidget {
   const GestionAdmin({super.key});
@@ -15,6 +18,26 @@ class _GestionAdminState extends State<GestionAdmin> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: pink,
+       appBar: AppBar(
+        backgroundColor: pink,
+          automaticallyImplyLeading: false,
+
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.logout,
+              color: Colors.white,
+              size: 30,
+            ),
+            onPressed: () {
+Provider.of<Auth>(context, listen: false).logout();
+                  Get.toNamed("/login");
+            },
+          )
+        ],
+      ),
+      
       body: Column(
         children: [
           Container(
@@ -64,7 +87,7 @@ class _GestionAdminState extends State<GestionAdmin> {
                               "0-6", "150"),
                           tutorWidget(
                               "course", "Gestion cours", "/menucours", "0-2", "100"),
-                          tutorWidget("quiz", "Gestion quiz", "Arts & Crafts",
+                          tutorWidget("quiz", "Gestion quiz", "/createquiz",
                               "0-4", "100"),
                         ],
                       ),
