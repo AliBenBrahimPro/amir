@@ -1,3 +1,4 @@
+import 'package:amir/models/cours_model.dart';
 import 'package:amir/models/domaines_model.dart';
 import 'package:amir/models/informatique_list_data.dart';
 import 'package:amir/screen/ColorScheme.dart';
@@ -14,7 +15,7 @@ class InformatiqueListView extends StatelessWidget {
       : super(key: key);
 
   final VoidCallback? callback;
-  final Domaines? informatiqueData;
+  final Cours? informatiqueData;
   final AnimationController? animationController;
   final Animation<double>? animation;
 
@@ -86,7 +87,7 @@ class InformatiqueListView extends StatelessWidget {
                                                     .spaceBetween,
                                             children: [
                                               Text(
-                                                informatiqueData!.nameDomain,
+                                                informatiqueData!.nameCour,
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w600,
@@ -99,7 +100,7 @@ class InformatiqueListView extends StatelessWidget {
                                             direction: Axis.vertical,
                                             children: <Widget>[
                                               Text(
-                                                informatiqueData!.certificate,
+                                                informatiqueData!.descriptionCour,
                                                 style: TextStyle(
                                                     fontSize: 18,
                                                     color: Colors.black

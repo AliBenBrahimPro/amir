@@ -1,42 +1,36 @@
+import 'package:amir/models/video_model.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../Services/video_service.dart';
 import '../theme.dart';
 
 class CoursePage extends StatefulWidget {
+  final String courName;
+  final String imageUrl;
+  final String leconId;
+
+  const CoursePage(
+      {super.key,
+      required this.courName,
+      required this.imageUrl,
+      required this.leconId});
   @override
   _CoursePageState createState() => _CoursePageState();
 }
 
 class _CoursePageState extends State<CoursePage> {
-  late String chosenImg;
-  late String chosenTitle;
+  VideosController videosController = VideosController();
   @override
   Widget build(BuildContext context) {
-    final Map arguments = {'img': "laravel", 'title': "Laravel"};
-    chosenImg = arguments['img'];
-    chosenTitle = arguments['title'];
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: pink,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.account_circle,
-              color: Colors.white,
-              size: 30,
-            ),
-            onPressed: () {},
-          )
-        ],
-      ),
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              chosenTitle,
+              widget.courName,
               style: const TextStyle(
                 color: Color(0xff2657ce),
                 fontSize: 27,
@@ -65,14 +59,15 @@ class _CoursePageState extends State<CoursePage> {
                 color: const Color.fromARGB(255, 255, 255, 255),
               ),
               child: Hero(
-                tag: chosenImg,
+                tag: widget.imageUrl,
                 child: Container(
-                  height: 200,
+                  height: 150,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(30)),
                       image: DecorationImage(
-                        image: AssetImage('asset/images/$chosenImg.png'),
+                        image: NetworkImage(
+                            'http://10.0.2.2:8000/${widget.imageUrl}'),
                       )),
                 ),
               ),
@@ -81,7 +76,7 @@ class _CoursePageState extends State<CoursePage> {
               height: 20,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 const Text(
                   'Playlist',
@@ -90,57 +85,49 @@ class _CoursePageState extends State<CoursePage> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    color: Color(0xffd3defa),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Container(
-                        width: 35,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.picture_as_pdf,
-                            color: Colors.blue,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ),
-                      Text(
-                        "Voir le cours",
-                        style: TextStyle(color: Colors.black.withOpacity(0.7)),
-                      )
-                    ],
-                  ),
-                )
               ],
             ),
             const SizedBox(
               height: 10,
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    productListing(
-                        'Introduction', 'Introduction de Laravel', 'active'),
-                    productListing('Routing de base',
-                        'Apprendre routing de base..', 'inactive'),
-                    productListing('Les contrôleurs',
-                        'Apprendre les contrôleurs..', 'inactive'),
-                    productListing('Les vues avec Blade',
-                        'Apprendre les vues avec Blade..', 'inactive')
-                  ],
-                ),
-              ),
+              child: FutureBuilder<List<Videos>>(
+                  future: videosController.getSpecVideos(widget.leconId),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('somthing went wrong ${snapshot.error}'),
+                      );
+                    } else if (snapshot.hasData) {
+                      final video = snapshot.data!;
+                      return ListView(
+                        physics: ClampingScrollPhysics(),
+                        shrinkWrap: true,
+                        children: video.map((videoDoc) {
+                          return productListing(
+                              'Introduction', videoDoc.url, 'active');
+                        }).toList(),
+                      );
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
             )
           ],
         ),
       ),
     );
   }
+
+  Future<void> _launchUrl(String url) async {
+    final Uri _url = Uri.parse(url);
+
+  if (!await launchUrl(_url)) {
+    throw Exception('Could not launch $_url');
+  }
+}
 
   Column productListing(String title, String info, String activeOrInactive) {
     return Column(
@@ -166,7 +153,10 @@ class _CoursePageState extends State<CoursePage> {
                       ? Colors.white
                       : const Color(0xff2657ce),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  _launchUrl(info);
+                  print("i'm herre");
+                },
               ),
             ),
             const SizedBox(
@@ -182,8 +172,11 @@ class _CoursePageState extends State<CoursePage> {
                   ),
                 ),
                 Text(
-                  info,
-                  style: const TextStyle(fontSize: 18, color: Colors.grey),
+                  "info",
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                  ),
                 )
               ],
             )

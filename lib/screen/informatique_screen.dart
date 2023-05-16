@@ -1,19 +1,25 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:amir/models/cours_model.dart';
 import 'package:amir/screen/ColorScheme.dart';
 import 'package:amir/screen/informatique_list_view.dart';
 import 'package:amir/screen/video_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../Services/cours_service.dart';
 import '../Services/domaines_services.dart';
 import '../models/domaines_model.dart';
 import '../models/informatique_list_data.dart';
+import 'chapitreAndLecon.dart';
 
 class InformatiqueHomeScreen extends StatefulWidget {
-  final String idCatalog;
-  const InformatiqueHomeScreen({super.key, required this.idCatalog});
+  final String idDomaine;
+  final String nomDomaines;
+  final String imageDomaine;
+  const InformatiqueHomeScreen(
+      {super.key, required this.idDomaine, required this.nomDomaines,required this.imageDomaine});
 
   @override
   _InformatiqueHomeScreenState createState() => _InformatiqueHomeScreenState();
@@ -31,11 +37,11 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
   DateTime endDate = DateTime.now().add(const Duration(days: 5));
   List<InformatiqueListData> _foundInfo = [];
   bool _sortAscending = true;
-  DomainesController domainesController = DomainesController();
-  List<Domaines> domaines = [];
+  CoursController coursController = CoursController();
+  List<Cours> cours = [];
   bool isDomainesLoaded = true;
-   getSpecificsDomaines(String? id) async {
-    domaines = await domainesController.getSpecDomaines(id);
+  getSpecificsDomaines(String? id) async {
+    cours = await coursController.getSpecCours(id);
     setState(() {
       isDomainesLoaded = false;
     });
@@ -47,7 +53,7 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
         duration: const Duration(milliseconds: 1000), vsync: this);
     _foundInfo = informatiqueList;
     _sortNew(false);
-    getSpecificsDomaines(widget.idCatalog);
+    getSpecificsDomaines(widget.idDomaine);
     super.initState();
   }
 
@@ -109,48 +115,49 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
           backgroundColor: pink,
           elevation: 0,
         ),
-        body: isDomainesLoaded?    Center(
-                                  child: CircularProgressIndicator(),
-                                ): Stack(
-          children: <Widget>[
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
-              },
-              child: Column(
+        body: isDomainesLoaded
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Stack(
                 children: <Widget>[
-                  getAppBarUI2(),
-                  getSearchBarUI(),
-                  Expanded(
-                    child: NestedScrollView(
-                        controller: _scrollController,
-                        headerSliverBuilder:
-                            (BuildContext context, bool innerBoxIsScrolled) {
-                          return <Widget>[
-                            SliverPersistentHeader(
-                              pinned: true,
-                              floating: true,
-                              delegate: ContestTabHeader(
-                                getFilterBarUI(),
-                              ),
-                            ),
-                          ];
-                        },
-                        body:   Container(
+                  InkWell(
+                    splashColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        getAppBarUI2(),
+                        getSearchBarUI(),
+                        Expanded(
+                            child: NestedScrollView(
+                                controller: _scrollController,
+                                headerSliverBuilder: (BuildContext context,
+                                    bool innerBoxIsScrolled) {
+                                  return <Widget>[
+                                    SliverPersistentHeader(
+                                      pinned: true,
+                                      floating: true,
+                                      delegate: ContestTabHeader(
+                                        getFilterBarUI(),
+                                      ),
+                                    ),
+                                  ];
+                                },
+                                body: Container(
                                   color: Colors.white,
                                   child: ListView.builder(
-                                    itemCount: domaines.length,
+                                    itemCount: cours.length,
                                     padding: const EdgeInsets.only(top: 8),
                                     scrollDirection: Axis.vertical,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      final int count = domaines.length > 10
-                                          ? 10
-                                          : domaines.length;
+                                      final int count =
+                                          cours.length > 10 ? 10 : cours.length;
                                       final Animation<double> animation =
                                           Tween<double>(begin: 0.0, end: 1.0)
                                               .animate(CurvedAnimation(
@@ -160,34 +167,29 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
                                                       curve: Curves
                                                           .fastOutSlowIn)));
                                       animationController?.forward();
-                                      
+
                                       return InformatiqueListView(
                                         callback: () {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    CoursePage()),
+                                                    ChapitreLecon(idCours:cours[index].id ,img: cours[index].image,name: cours[index].nameCour,)),
                                           );
                                         },
-                                        informatiqueData: domaines[index],
+                                        informatiqueData: cours[index],
                                         animation: animation,
                                         animationController:
                                             animationController!,
                                       );
                                     },
                                   ),
-                                )
-                    ))
-                                 
-                              
-                          
-                  
+                                )))
+                      ],
+                    ),
+                  ),
                 ],
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -214,11 +216,10 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
                   return const SizedBox();
                 } else {
                   return ListView.builder(
-                    itemCount: domaines.length,
+                    itemCount: cours.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (BuildContext context, int index) {
-                      final int count =
-                          domaines.length > 10 ? 10 : domaines.length;
+                      final int count = cours.length > 10 ? 10 : cours.length;
                       final Animation<double> animation =
                           Tween<double>(begin: 0.0, end: 1.0).animate(
                               CurvedAnimation(
@@ -229,7 +230,7 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
 
                       return InformatiqueListView(
                         callback: () {},
-                        informatiqueData: domaines[index],
+                        informatiqueData: cours[index],
                         animation: animation,
                         animationController: animationController!,
                       );
@@ -349,7 +350,7 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      '${domaines.length} cours disponible',
+                      '${cours.length} cours disponible',
                       style: TextStyle(
                         fontWeight: FontWeight.w100,
                         fontSize: 16,
@@ -539,7 +540,7 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
                   ),
                 ),
                 Text(
-                  'Informatique Cours',
+                  widget.nomDomaines,
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -554,7 +555,7 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
           SizedBox(
             width: 60,
             height: 60,
-            child: Image.asset('asset/images/boy1.png'),
+            child: Image.network('http://10.0.2.2:8000/${widget.imageDomaine}'),
           )
         ],
       ),

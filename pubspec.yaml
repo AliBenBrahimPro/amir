@@ -56,6 +56,8 @@ dependencies:
   icon_picker: ^2.1.0
   file_picker: ^5.2.11
   flutter_facebook_auth: ^5.0.10
+  group_list_view: ^1.1.1
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

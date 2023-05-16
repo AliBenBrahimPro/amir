@@ -20,7 +20,7 @@ class VideosController {
   }
 
   Future<List<Videos>> getSpecVideos(String? id) async {
-    Dio.Response response = await dio().get('/catalogues/$id/videos');
+    Dio.Response response = await dio().get('/lecons/$id/videos');
     if (response.statusCode == 200) {
       return videosFromJson(response.data["data"]);
     } else {

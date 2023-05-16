@@ -76,7 +76,7 @@ class RecommendItem extends StatelessWidget {
                       SizedBox(
                         width: 20,
                       ),
-                      Icon(
+                      const Icon(
                         Icons.star,
                         color: orange,
                         size: 14,

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:amir/screen/ColorScheme.dart';
 
 import '../Services/catalogues_services.dart';
+import '../Services/domaines_services.dart';
 import '../models/catalogues_model.dart';
+import '../models/domaines_model.dart';
 
 class CoursScreen extends StatefulWidget {
   const CoursScreen({super.key});
@@ -14,6 +16,7 @@ class CoursScreen extends StatefulWidget {
 
 class _CoursScreenState extends State<CoursScreen> {
   CataloguesController cataloguesController = CataloguesController();
+  DomainesController domainesController= DomainesController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,15 +56,15 @@ class _CoursScreenState extends State<CoursScreen> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Catalogues>>(
-                future: cataloguesController.getAllcatalogues(),
+            child: FutureBuilder<List<Domaines>>(
+                future: domainesController.getAllDomaines(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return Center(
                       child: Text('somthing went wrong ${snapshot.error}'),
                     );
                   } else if (snapshot.hasData) {
-                    List<Catalogues> catalogues = snapshot.data!;
+                    List<Domaines> domaines = snapshot.data!;
                     return Container(
                       padding: const EdgeInsets.all(10),
                       width: MediaQuery.of(context).size.width,
@@ -70,12 +73,12 @@ class _CoursScreenState extends State<CoursScreen> {
                         children: [
                           Expanded(
                               child: ListView(
-                            children: catalogues.map((document) {
+                            children: domaines.map((document) {
                               return tutorWidget(
                                   document.image,
-                                  document.collegeYear,
-                                  document.collegeYear,
-                                  document.nameCatalogue,
+                                  document.nameDomain,
+                                  document.certificate,
+                                  document.nameDomain,
                                   document.id);
                             }).toList(),
                           ))
@@ -102,7 +105,9 @@ class _CoursScreenState extends State<CoursScreen> {
           context,
           MaterialPageRoute(
               builder: (context) => InformatiqueHomeScreen(
-                    idCatalog: price,
+                    idDomaine: price,
+                    nomDomaines: name,
+                    imageDomaine: img,
                   )),
         );
       },
