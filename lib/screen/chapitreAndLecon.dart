@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:group_list_view/group_list_view.dart';
 
-import '../Services/catalogues_services.dart';
 import '../Services/chapitres_Services.dart';
 import '../Services/cours_service.dart';
 import '../Services/domaines_services.dart';
 import '../Services/lecons_Services.dart';
-import '../models/catalogues_model.dart';
 import '../models/chapitres_model.dart';
 import '../models/cours_model.dart';
 import '../models/domaines_model.dart';
@@ -31,12 +29,10 @@ class ChapitreLecon extends StatefulWidget {
 class _ChapitreLeconState extends State<ChapitreLecon> {
   List<Color> _colorCollection = <Color>[];
 
-  List<Catalogues> category = [];
   List<Domaines> domaines = [];
   List<Cours> cours = [];
   List<Chapitres> chapitre = [];
   LeconsController leconsController = LeconsController();
-  CataloguesController caloguesController = CataloguesController();
   DomainesController domainesController = DomainesController();
   CoursController coursController = CoursController();
   ChapitresController chapitresController = ChapitresController();
@@ -116,7 +112,7 @@ class _ChapitreLeconState extends State<ChapitreLecon> {
             Expanded(
               child: FutureBuilder<List<Chapitres>>(
                   future: chapitresController
-                      .getSpecChapitres("6447d628fdfaa4ea95d64475"),
+                      .getSpecChapitres(widget.idCours),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
                       return Center(

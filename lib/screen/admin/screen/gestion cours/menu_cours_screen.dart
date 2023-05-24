@@ -1,4 +1,3 @@
-import 'package:amir/screen/admin/screen/gestion%20cours/catalogues/read_catalogues.dart';
 import 'package:amir/screen/admin/screen/gestion%20cours/chapitres/read_chaptres.dart';
 import 'package:amir/screen/admin/screen/gestion%20cours/cours/read_cours.dart';
 import 'package:amir/screen/admin/screen/gestion%20cours/domaines/read_domaine.dart';
@@ -47,21 +46,6 @@ class _MenuCoursState extends State<MenuCours> {
         ),
         child:
             Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: MenuItem(
-              title: "Gestion de catalogue",
-              leadingIcon: "asset/icons/catalog.svg",
-              bgIconColor: yellow,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ReadCatalogues()),
-                );
-              },
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.only(left: 45),
             child: Divider(

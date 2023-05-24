@@ -317,8 +317,8 @@ class _ReadVideosState extends State<ReadVideos> {
                     itemBuilder: (BuildContext context, int index) {
                       Videos? item = _foundInfo[index];
                       return ListTile(
-                        title: Text(item.number),
-                        subtitle: Text(item.number.toString()),
+                        title: Text(item.title),
+                        subtitle: Text(item.subTitle.toString()),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [

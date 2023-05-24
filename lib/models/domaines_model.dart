@@ -6,7 +6,6 @@ class Domaines {
         required this.id,
         required this.nameDomain,
         required this.certificate,
-        required this.idCatalogue,
         required this.image,
         required this.icon,
         required this.createdAt,
@@ -16,7 +15,6 @@ class Domaines {
     String id;
     String nameDomain;
     String certificate;
-    String idCatalogue;
     String image;
     String icon;
     DateTime createdAt;
@@ -26,7 +24,6 @@ class Domaines {
         id: json["_id"],
         nameDomain: json["name_domain"],
         certificate: json["certificate"],
-        idCatalogue: json["id_catalogue"],
         image: json["image"],
         icon: json["icon"],
         createdAt: DateTime.parse(json["createdAt"]),
@@ -37,7 +34,6 @@ class Domaines {
         "_id": id,
         "name_domain": nameDomain,
         "certificate": certificate,
-        "id_catalogue": idCatalogue,
         "image": image,
         "icon": icon,
         "createdAt": createdAt.toIso8601String(),

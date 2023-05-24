@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:amir/models/user_model.dart';
@@ -25,7 +24,7 @@ class PdfController {
   }
 
   Future<List<Pdf>> getSpecPdf(String? id) async {
-    Dio.Response response = await dio().get('/catalogues/$id/pdfs');
+    Dio.Response response = await dio().get('/lecons/$id/pdf');
     if (response.statusCode == 200) {
       return pdfFromJson(response.data["data"]);
     } else {
@@ -44,13 +43,15 @@ class PdfController {
   }
 
   void createPdf(String number, String? idLecons,
-      File? file) async {
+      File? file,String title,String sub_title) async {
       
     String fileName = file!.path.split('/').last;
     var formData = Dio.FormData.fromMap({
       "number": number,
       "file": await Dio.MultipartFile.fromFile(file.path, filename: fileName),
       "id_lecons": idLecons,
+      "title":title,
+      "sub_title":sub_title
     });
     try {
       Dio.Response response = await dio().post('/pdfs', data: formData);

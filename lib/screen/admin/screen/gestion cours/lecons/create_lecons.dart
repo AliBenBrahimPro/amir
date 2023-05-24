@@ -9,12 +9,10 @@ import 'package:amir/screen/admin/screen/gestion%20cours/lecons/read_lecons.dart
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../Services/catalogues_services.dart';
 import '../../../../../Services/chapitres_Services.dart';
 import '../../../../../Services/lecons_Services.dart';
 import '../../../../../Services/cours_service.dart';
 import '../../../../../Services/domaines_services.dart';
-import '../../../../../models/catalogues_model.dart';
 import '../../../../../shared/app_colors.dart';
 import '../../../../../shared/dimensions/dimensions.dart';
 import '../../../../../theme.dart';
@@ -29,29 +27,21 @@ class CreateLecons extends StatefulWidget {
 }
 
 class _CreateLeconsState extends State<CreateLecons> {
-  List<Catalogues> category = [];
   List<Domaines> domaines = [];
   List<Cours> cours = [];
   List<Chapitres> chapitre = [];
-  CataloguesController caloguesController = CataloguesController();
   DomainesController domainesController = DomainesController();
   CoursController coursController = CoursController();
   ChapitresController chapitresController = ChapitresController();
   bool isLoaded = true;
   bool isDomainesLoaded = true;
   getData() async {
-    category = await caloguesController.getAllcatalogues();
+    domaines = await domainesController.getAllDomaines();
     setState(() {
       isLoaded = false;
     });
   }
 
-  getSpecificsDomaines(String? id) async {
-    domaines = await domainesController.getSpecDomaines(id);
-    setState(() {
-      isDomainesLoaded = false;
-    });
-  }
 
   getSpecificsCours(String? id) async {
     cours = await coursController.getSpecCours(id);
@@ -105,82 +95,12 @@ class _CreateLeconsState extends State<CreateLecons> {
           ),
         ),
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-        body: FutureBuilder<List<Catalogues>>(
-          future: caloguesController.getAllcatalogues(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<Catalogues> data = snapshot.data!;
-
-              return data.isEmpty
-                  ? const Center(
-                      child: Text("Pas de catalogue"),
-                    )
-                  : Form(
+        body:  Form(
                       key: _formkey,
                       child: Center(
                         child: ListView(
                           shrinkWrap: true,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: Constants.screenHeight * 0.001,
-                                  horizontal: Constants.screenWidth * 0.07),
-                              child: DropdownButtonFormField<String?>(
-                                hint: const Text("Catalogue"),
-                                decoration: InputDecoration(
-                                  focusedErrorBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  errorBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(
-                                      color: pinkColor,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(
-                                        width: 2.0, color: pinkColor),
-                                  ),
-                                ),
-                                value: dropdownvalue,
-                                isDense: true,
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                items: data.map((items) {
-                                  return DropdownMenuItem(
-                                    value: items.id,
-                                    child: Text(items.collegeYear),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    List<Cours> cours = [];
-                                    List<Chapitres> chapitre = [];
-                                    domaines.clear();
-                                    cours.clear();
-                                    chapitre.clear();
-                                    _selected = null;
-                                    idCours = null;
-                                    idChapitre = null;
-                                    dropdownvalue = newValue!;
-                                    getSpecificsDomaines(dropdownvalue);
-                                    log(domaines
-                                        .map((e) => e.nameDomain)
-                                        .toString());
-                                  });
-                                },
-                              ),
-                            ),
                             const SizedBox(
                               height: 20,
                             ),
@@ -389,11 +309,7 @@ class _CreateLeconsState extends State<CreateLecons> {
                                     })
                           ],
                         ),
-                      ));
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ));
+                  
+        )));
   }
 }

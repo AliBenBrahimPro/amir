@@ -22,6 +22,17 @@ class UserController {
       throw Exception("failed");
     }
   }
+   Future<List<UsersModel>> getAllEtudiant() async {
+  Dio.Response response = await dio().get('/users/getetudiant');
+
+   
+    if (response.statusCode == 200) {
+ 
+      return userFromJson(response.data["data"]);
+    } else {
+      throw Exception("failed");
+    }
+  }
 
   Stream<List<UsersModel?>?> getUserData(Duration refreshTime) async* {
     String? tokens = await _storage.read(key: 'token');

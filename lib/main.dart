@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'shared/routes/app_routes.dart';
+import 'package:socket_io_client/socket_io_client.dart' as Io;
 
 void main() {
-  runApp(  MultiProvider(
+ 
+  runApp(
+    MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Auth()),
       ],
       child: const MyApp(),
-    ),);
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

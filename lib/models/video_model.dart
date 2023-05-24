@@ -4,6 +4,8 @@ List<Videos> videosFromJson(dynamic str) =>
 class Videos {
     String id;
     String url;
+    String title;
+    String subTitle;
     String time;
     String idLecons;
     String number;
@@ -14,6 +16,8 @@ class Videos {
     Videos({
         required this.id,
         required this.url,
+        required this.title,
+        required this.subTitle,
         required this.time,
         required this.idLecons,
         required this.number,
@@ -25,6 +29,8 @@ class Videos {
     factory Videos.fromJson(Map<String, dynamic> json) => Videos(
         id: json["_id"],
         url: json["url"],
+        title: json["title"],
+        subTitle: json["sub_title"],
         time: json["time"].toString(),
         idLecons: json["id_lecons"],
         number: json["number"].toString(),
@@ -36,6 +42,8 @@ class Videos {
     Map<String, dynamic> toJson() => {
         "_id": id,
         "url": url,
+        "title": title,
+        "sub_title": subTitle,
         "time": time,
         "id_lecons": idLecons,
         "number": number,

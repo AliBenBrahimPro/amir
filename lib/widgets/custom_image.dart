@@ -54,13 +54,14 @@ class CustomImage extends StatelessWidget {
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     borderRadius: borderRadius ?? BorderRadius.circular(radius),
-                    image: DecorationImage(image: imageProvider, fit: fit),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.fitHeight),
                   ),
                 ),
               )
             : Image(
                 image: AssetImage(image),
-                fit: fit,
+                fit: BoxFit.fitHeight,
               ));
   }
 }

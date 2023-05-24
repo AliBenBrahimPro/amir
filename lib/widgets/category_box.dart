@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:amir/theme/color.dart';
 
+import '../models/domaines_model.dart';
+
 class CategoryBox extends StatelessWidget {
   CategoryBox(
       {Key? key,
@@ -12,14 +14,13 @@ class CategoryBox extends StatelessWidget {
       this.onTap,
       this.selectedColor = actionColor})
       : super(key: key);
-  final data;
+  final Domaines data;
   final Color selectedColor;
   final bool isSelected;
   final GestureTapCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    log('test : ${data?["icon"]} =============================================================');
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -40,7 +41,7 @@ class CategoryBox extends StatelessWidget {
                   ],
                   shape: BoxShape.circle),
               child: Image.asset(
-                data["icon"],
+                data.icon,
                 color: isSelected ? selectedColor : textColor,
                 width: 30,
                 height: 30,
@@ -49,7 +50,7 @@ class CategoryBox extends StatelessWidget {
             height: 10,
           ),
           Text(
-            data["name"],
+            data.nameDomain,
             maxLines: 1,
             overflow: TextOverflow.fade,
             style: TextStyle(color: textColor, fontWeight: FontWeight.w500),

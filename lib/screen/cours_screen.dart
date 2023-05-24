@@ -1,10 +1,7 @@
 import 'package:amir/screen/informatique_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:amir/screen/ColorScheme.dart';
-
-import '../Services/catalogues_services.dart';
 import '../Services/domaines_services.dart';
-import '../models/catalogues_model.dart';
 import '../models/domaines_model.dart';
 
 class CoursScreen extends StatefulWidget {
@@ -15,7 +12,6 @@ class CoursScreen extends StatefulWidget {
 }
 
 class _CoursScreenState extends State<CoursScreen> {
-  CataloguesController cataloguesController = CataloguesController();
   DomainesController domainesController= DomainesController();
   @override
   Widget build(BuildContext context) {

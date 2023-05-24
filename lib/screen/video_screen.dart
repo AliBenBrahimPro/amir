@@ -105,7 +105,7 @@ class _CoursePageState extends State<CoursePage> {
                         shrinkWrap: true,
                         children: video.map((videoDoc) {
                           return productListing(
-                              'Introduction', videoDoc.url, 'active');
+                              videoDoc, videoDoc.url, 'active');
                         }).toList(),
                       );
                     } else {
@@ -124,12 +124,12 @@ class _CoursePageState extends State<CoursePage> {
   Future<void> _launchUrl(String url) async {
     final Uri _url = Uri.parse(url);
 
-  if (!await launchUrl(_url)) {
-    throw Exception('Could not launch $_url');
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
-}
 
-  Column productListing(String title, String info, String activeOrInactive) {
+  Column productListing(Videos title, String info, String activeOrInactive) {
     return Column(
       children: <Widget>[
         const SizedBox(
@@ -166,13 +166,13 @@ class _CoursePageState extends State<CoursePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  title,
+                  title.title,
                   style: const TextStyle(
                     fontSize: 20,
                   ),
                 ),
                 Text(
-                  "info",
+                  title.subTitle,
                   style: const TextStyle(
                     fontSize: 18,
                     color: Colors.grey,

@@ -1,3 +1,4 @@
+import 'package:amir/models/cours_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:amir/theme/color.dart';
@@ -8,6 +9,10 @@ import 'package:amir/widgets/notification_box.dart';
 import 'package:amir/widgets/recommend_item.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../Services/cours_service.dart';
+import '../Services/domaines_services.dart';
+import '../models/domaines_model.dart';
+
 class AllCourse extends StatefulWidget {
   const AllCourse({Key? key}) : super(key: key);
 
@@ -16,6 +21,35 @@ class AllCourse extends StatefulWidget {
 }
 
 class _AllCourseState extends State<AllCourse> {
+  List<Domaines> domaines = [];
+  List<Cours> cours = [];
+  CoursController coursController = CoursController();
+
+  DomainesController domainesController = DomainesController();
+  bool isLoaded = true;
+  bool isLoadedCours = true;
+  getData() async {
+    domaines = await domainesController.getAllDomaines();
+    setState(() {
+      isLoaded = false;
+    });
+  }
+
+  getDataCours() async {
+    cours = await coursController.getAllCours();
+    setState(() {
+      isLoadedCours = false;
+    });
+    print(cours);
+  }
+
+  @override
+  void initState() {
+    getData();
+    getDataCours();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +77,9 @@ class _AllCourseState extends State<AllCourse> {
       child: Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          getCategories(),
+          isLoaded
+              ? Center(child: CircularProgressIndicator())
+              : getCategories(),
           SizedBox(
             height: 15,
           ),
@@ -56,7 +92,11 @@ class _AllCourseState extends State<AllCourse> {
                   fontSize: 24,
                 )),
           ),
-          getFeature(),
+          isLoadedCours
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : getFeature(),
           SizedBox(
             height: 15,
           ),
@@ -163,12 +203,12 @@ class _AllCourseState extends State<AllCourse> {
       scrollDirection: Axis.horizontal,
       child: Row(
           children: List.generate(
-              categories.length,
+              domaines.length,
               (index) => Padding(
                   padding: const EdgeInsets.only(right: 15),
                   child: CategoryBox(
                     selectedColor: Colors.white,
-                    data: categories[index],
+                    data: domaines[index],
                     onTap: () {
                       setState(() {
                         selectedCollection = index;
@@ -186,8 +226,8 @@ class _AllCourseState extends State<AllCourse> {
           disableCenter: true,
           viewportFraction: .75,
         ),
-        items: List.generate(features.length,
-            (index) => FeatureItem(onTap: () {}, data: features[index])));
+        items: List.generate(cours.length,
+            (index) => FeatureItem(onTap: () {}, data: cours[index])));
   }
 
   getRecommend() {

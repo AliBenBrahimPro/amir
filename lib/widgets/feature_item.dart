@@ -1,3 +1,4 @@
+import 'package:amir/models/cours_model.dart';
 import 'package:flutter/material.dart';
 import 'package:amir/theme/color.dart';
 
@@ -11,7 +12,7 @@ class FeatureItem extends StatelessWidget {
       this.height = 290,
       this.onTap})
       : super(key: key);
-  final data;
+  final Cours data;
   final double width;
   final double height;
   final GestureTapCallback? onTap;
@@ -40,7 +41,7 @@ class FeatureItem extends StatelessWidget {
         child: Stack(
           children: [
             CustomImage(
-              data["image"],
+              "http://10.0.2.2:8000/${data.image}",
               width: double.infinity,
               height: 190,
               radius: 15,
@@ -54,7 +55,7 @@ class FeatureItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      data["name"],
+                      data.nameCour,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -65,18 +66,18 @@ class FeatureItem extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        getAttribute(Icons.play_circle_outlined, labelColor,
-                            data["session"]),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        getAttribute(Icons.schedule_rounded, labelColor,
-                            data["duration"]),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     getAttribute(Icons.play_circle_outlined, labelColor,
+                    //         data.),
+                    //     SizedBox(
+                    //       width: 12,
+                    //     ),
+                    //     getAttribute(Icons.schedule_rounded, labelColor,
+                    //         data.createdAt.minute.toString()),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),

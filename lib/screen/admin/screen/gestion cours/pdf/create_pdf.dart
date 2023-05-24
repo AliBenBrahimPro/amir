@@ -11,13 +11,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../Services/catalogues_services.dart';
 import '../../../../../Services/chapitres_Services.dart';
 import '../../../../../Services/lecons_Services.dart';
 import '../../../../../Services/cours_service.dart';
 import '../../../../../Services/domaines_services.dart';
 import '../../../../../Services/pdf_service.dart';
-import '../../../../../models/catalogues_model.dart';
 import '../../../../../shared/app_colors.dart';
 import '../../../../../shared/dimensions/dimensions.dart';
 import '../../../../../theme.dart';
@@ -33,12 +31,10 @@ class CreatePdf extends StatefulWidget {
 }
 
 class _CreatePdfState extends State<CreatePdf> {
-  List<Catalogues> category = [];
   List<Domaines> domaines = [];
   List<Cours> cours = [];
   List<Chapitres> chapitre = [];
   List<Lecons> lecons = [];
-  CataloguesController caloguesController = CataloguesController();
   DomainesController domainesController = DomainesController();
   CoursController coursController = CoursController();
   ChapitresController chapitresController = ChapitresController();
@@ -47,18 +43,13 @@ class _CreatePdfState extends State<CreatePdf> {
   bool isDomainesLoaded = true;
   File? pdfFile;
   getData() async {
-    category = await caloguesController.getAllcatalogues();
+    domaines = await domainesController.getAllDomaines();
     setState(() {
       isLoaded = false;
     });
   }
 
-  getSpecificsDomaines(String? id) async {
-    domaines = await domainesController.getSpecDomaines(id);
-    setState(() {
-      isDomainesLoaded = false;
-    });
-  }
+
 
   getSpecificsCours(String? id) async {
     cours = await coursController.getSpecCours(id);
@@ -116,7 +107,8 @@ class _CreatePdfState extends State<CreatePdf> {
   TextEditingController nameController = TextEditingController();
   TextEditingController numberController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-
+  TextEditingController titleController = TextEditingController();
+   TextEditingController subtitleController = TextEditingController();
   PdfController pdfController = PdfController();
 
   @override
@@ -132,17 +124,7 @@ class _CreatePdfState extends State<CreatePdf> {
           ),
         ),
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-        body: FutureBuilder<List<Catalogues>>(
-          future: caloguesController.getAllcatalogues(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<Catalogues> data = snapshot.data!;
-
-              return data.isEmpty
-                  ? const Center(
-                      child: Text("Pas de catalogue"),
-                    )
-                  : Form(
+        body:  Form(
                       key: _formkey,
                       child: Center(
                         child: ListView(
@@ -196,66 +178,6 @@ class _CreatePdfState extends State<CreatePdf> {
                                         ],
                                       ),
                                     ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: Constants.screenHeight * 0.001,
-                                  horizontal: Constants.screenWidth * 0.07),
-                              child: DropdownButtonFormField<String?>(
-                                hint: const Text("Catalogue"),
-                                decoration: InputDecoration(
-                                  focusedErrorBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  errorBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(
-                                      color: pinkColor,
-                                      width: 2.0,
-                                    ),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                    borderSide: const BorderSide(
-                                        width: 2.0, color: pinkColor),
-                                  ),
-                                ),
-                                value: dropdownvalue,
-                                isDense: true,
-                                icon: const Icon(Icons.keyboard_arrow_down),
-                                items: data.map((items) {
-                                  return DropdownMenuItem(
-                                    value: items.id,
-                                    child: Text(items.collegeYear),
-                                  );
-                                }).toList(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    List<Cours> cours = [];
-                                    List<Chapitres> chapitre = [];
-                                    domaines.clear();
-                                    cours.clear();
-                                    chapitre.clear();
-                                    _selected = null;
-                                    idCours = null;
-                                    idChapitre = null;
-                                    dropdownvalue = newValue!;
-                                    getSpecificsDomaines(dropdownvalue);
-                                    log(domaines
-                                        .map((e) => e.nameDomain)
-                                        .toString());
-                                  });
-                                },
-                              ),
                             ),
                             const SizedBox(
                               height: 20,
@@ -478,6 +400,16 @@ class _CreatePdfState extends State<CreatePdf> {
                               height: 20,
                             ),
                             InputField(
+                              label: "title",
+                              controller: titleController,
+                              textInputType: TextInputType.text,
+                            ),
+                            InputField(
+                              label: "Sub title",
+                              controller: subtitleController,
+                              textInputType: TextInputType.text,
+                            ),
+                            InputField(
                               label: "numero du pdf",
                               controller: numberController,
                               textInputType: TextInputType.text,
@@ -492,9 +424,22 @@ class _CreatePdfState extends State<CreatePdf> {
                                   )
                                 : ActionButton(
                                     label: "Ajouter",
-                                    buttonColor: greenColor,
+                                    buttonColor:pdfFile == null
+                                  ?Colors.grey: greenColor,
                                     labelColor: Colors.white,
-                                    onPressed: () {
+                                    onPressed:pdfFile == null
+                                  ? (){
+                                    final snackBar = SnackBar(
+            content: const Text('Please select a file'),
+            backgroundColor: (Colors.black12),
+            action: SnackBarAction(
+              label: 'dismiss',
+              onPressed: () {
+              },
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  }: () {
                                       if (_formkey.currentState!.validate()) {
                                         log(_image.toString());
                                         Map formData = {
@@ -507,16 +452,14 @@ class _CreatePdfState extends State<CreatePdf> {
                                         pdfController.createPdf(
                                             numberController.text,
                                             idLecons,
-                                            pdfFile);
+                                            pdfFile,titleController.text,subtitleController.text);
                                       }
                                     })
                           ],
                         ),
-                      ));
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ));
+                      )));
+            
+  
+        
   }
 }

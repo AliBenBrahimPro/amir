@@ -3,10 +3,9 @@ import 'package:amir/screen/admin/screen/gestion%20cours/domaines/Create_domaine
 import 'package:amir/screen/admin/screen/gestion%20cours/menu_cours_screen.dart';
 import 'package:amir/screen/admin/screen/gestion%20quiz/create_quiz.dart';
 import 'package:amir/screen/chapitreAndLecon.dart';
-import 'package:amir/screen/enseigne/home_enseigne_screen.dart';
 import 'package:amir/screen/navigation_screen.dart';
+import 'package:amir/screen/pdf_reader.dart';
 import 'package:amir/screen/profile_screen.dart';
-import 'package:amir/screen/test.dart';
 import 'package:flutter/material.dart';
 
 import '../../screen/Authentication/Forgot_password/forgotpass.dart';
@@ -16,6 +15,7 @@ import '../../screen/Tabar_screen.dart';
 import '../../screen/admin/screen/gestion_screen.dart';
 import '../../screen/admin/screen/home_admin_screen.dart';
 import '../../screen/admin/screen/read_account.dart';
+import '../../screen/enseigne/Home_enseigne.dart';
 import '../../screen/pdfAndVideo.dart';
 import '../../screen/splash_screen/splash_screen.dart';
 
@@ -38,8 +38,7 @@ class Routes {
         return MaterialPageRoute(builder: (_) => HomeEnseigne());
         case '/gestioncompte':
         return MaterialPageRoute(builder: (_) => ReadAccount());
-        case '/test':
-        return MaterialPageRoute(builder: (_) => Test());
+        
         case '/menucours':
         return MaterialPageRoute(builder: (_) => MenuCours());
         case '/createdomaines':

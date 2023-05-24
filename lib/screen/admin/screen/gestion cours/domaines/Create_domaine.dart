@@ -5,9 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../../Services/catalogues_services.dart';
 import '../../../../../Services/domaines_services.dart';
-import '../../../../../models/catalogues_model.dart';
 import '../../../../../shared/app_colors.dart';
 import '../../../../../shared/dimensions/dimensions.dart';
 import '../../../../../theme.dart';
@@ -22,19 +20,12 @@ class CreateDomaines extends StatefulWidget {
 }
 
 class _CreateDomainesState extends State<CreateDomaines> {
-  List<Catalogues> category = [];
-  CataloguesController caloguesController = CataloguesController();
+
   var IsLoaded = true;
-  getData() async {
-    category = await caloguesController.getAllcatalogues();
-    setState(() {
-      IsLoaded = false;
-    });
-  }
+
 
   @override
   void initState() {
-    getData();
     super.initState();
   }
 
@@ -106,13 +97,8 @@ class _CreateDomainesState extends State<CreateDomaines> {
           backgroundColor: pink,
         ),
         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-        body: FutureBuilder<List<Catalogues>>(
-          future: caloguesController.getAllcatalogues(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<Catalogues> data = snapshot.data!;
-              
-              return data.isEmpty? const Center(child: Text("Pas de catalogue"),):
+        body: 
+    
               Form(
                   key: _formkey,
                   child: Center(
@@ -223,55 +209,7 @@ class _CreateDomainesState extends State<CreateDomaines> {
                         const SizedBox(
                           height: 20,
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: Constants.screenHeight * 0.001,
-                              horizontal: Constants.screenWidth * 0.07),
-                          child: DropdownButtonFormField<String?>(
-                            hint: const Text("Catalogue"),
-                            decoration: InputDecoration(
-                              focusedErrorBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              errorBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.red,
-                                ),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                  color: pinkColor,
-                                  width: 2.0,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                borderSide: const BorderSide(
-                                    width: 2.0, color: pinkColor),
-                              ),
-                            ),
-                            value: dropdownvalue,
-                            isDense: true,
-                            icon: const Icon(Icons.keyboard_arrow_down),
-                            items: data.map((items) {
-                              return DropdownMenuItem(
-                                value: items.id,
-                                child: Text(items.collegeYear),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                dropdownvalue = newValue!;
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(
+                       const SizedBox(
                           height: 20,
                         ),
                         InputField(
@@ -310,19 +248,13 @@ class _CreateDomainesState extends State<CreateDomaines> {
                                     domainesController.createDomaines(
                                       nameDomaineController.text,
                                       certificateController.text,
-                                      dropdownvalue,
+                                    
                                       _image,_selected
                                     );
                                   }
                                 })
                       ],
-                    ),
-                  ));
-            }
-            else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ));
+                    
+                      )        )));
   }
 }

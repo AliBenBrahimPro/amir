@@ -2,6 +2,7 @@ import 'package:amir/screen/video_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'ColorScheme.dart';
+import 'pdf_reader.dart';
 
 class TabarScreen extends StatefulWidget {
   final String coursName;
@@ -46,7 +47,6 @@ class _TabarScreenState extends State<TabarScreen> {
               Tab(icon: Icon(Icons.picture_as_pdf_sharp), text: "PDF"),
             ],
           ),
-          title: Text('TutorialKart - TabBar & TabBarView'),
         ),
         body: TabBarView(
           children: [
@@ -57,7 +57,7 @@ class _TabarScreenState extends State<TabarScreen> {
               leconId: widget.leconId,
 
             )),
-            Center(child: Text("Page 2")),
+            Center(child: PdfReader(leconId: widget.leconId,)),
           ],
         ),
       ),

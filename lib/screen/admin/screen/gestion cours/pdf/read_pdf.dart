@@ -316,8 +316,8 @@ class _ReadPdfState extends State<ReadPdf> {
                     itemBuilder: (BuildContext context, int index) {
                       Pdf? item = _foundInfo[index];
                       return ListTile(
-                        title: Text(item.file),
-                        subtitle: Text(item.number.toString()),
+                        title: Text(item.title),
+                        subtitle: Text(item.subTitle.toString()),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [

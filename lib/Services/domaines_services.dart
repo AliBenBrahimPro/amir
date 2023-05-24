@@ -22,14 +22,7 @@ class DomainesController {
       throw Exception("failed");
     }
   }
-  Future<List<Domaines>> getSpecDomaines(String? id) async {
-     Dio.Response response = await dio().get('/catalogues/$id/domaines');
-    if (response.statusCode == 200) {
-      return domainesFromJson(response.data["data"]);
-    } else {
-      throw Exception("failed");
-    }
-  }
+
 
   Stream<List<Domaines>> getStreamData(Duration refreshTime) async* {
     String? tokens = await _storage.read(key: 'token');
@@ -40,13 +33,12 @@ class DomainesController {
       }
     }
   }
-     void createDomaines(String domaine,String certificate,String? idCatalogue,File? file,String? icon) async {
+     void createDomaines(String domaine,String certificate,File? file,String? icon) async {
         String fileName = file!.path.split('/').last;
     var formData = Dio.FormData.fromMap({
         "name_domain":domaine,
         "image": await Dio.MultipartFile.fromFile(file.path, filename:fileName),
         "certificate": certificate,
-        "id_catalogue": idCatalogue,
         'icon':icon
     });
     try {
