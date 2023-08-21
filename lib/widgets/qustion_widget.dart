@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:amir/Services/quiz_service.dart';
+import 'package:amir/models/quiz_model.dart';
+import 'package:amir/widgets/result_page.dart';
 import 'package:flutter/material.dart';
 
 import '../models/question_model.dart';
 import 'option_widget.dart';
-import 'result_page.dart';
 
 class QuestionWidget extends StatefulWidget {
   const QuestionWidget({super.key});
@@ -20,6 +22,22 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   bool _isLocked = false;
   Timer? timer;
   int start = 5;
+  int sized = 0;
+  List<QuizModel> questions = [];
+  List question3 = [];
+  bool isLoaded = true;
+  QuizController quizController = QuizController();
+
+  getData() async {
+    questions = await quizController.getAllQuiz();
+    setState(() {
+      isLoaded = false;
+    });
+    for (int i = 0; i < questions.length; i++) {
+      question3 = questions[i].questions;
+    }
+  }
+
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       setState(() {
@@ -27,7 +45,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
         } else {
           start--;
           if (start == 0) {
-            if (_questionNumber < questions.length) {
+            if (_questionNumber < question3.length) {
               _controller.nextPage(
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeInExpo);
@@ -50,6 +68,8 @@ class _QuestionWidgetState extends State<QuestionWidget> {
 
   @override
   void initState() {
+    getData();
+
     _controller = PageController(initialPage: 0);
     super.initState();
     startTimer();
@@ -65,49 +85,54 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 32,
+      body: isLoaded
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Temps : $start',
+                        ),
+                        Text('Question $_questionNumber/${question3.length}'),
+                      ],
+                    ),
+                    const Divider(
+                      thickness: 1,
+                      color: Colors.grey,
+                    ),
+                    Expanded(
+                        child: PageView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: question3.length,
+                      controller: _controller,
+                      itemBuilder: (context, index) {
+                        final _question = question3[index];
+
+                        return buildQuestion(_question);
+                      },
+                    )),
+                    const SizedBox(
+                      height: 20,
+                    )
+                  ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Temps : $start',
-                  ),
-                  Text('Question $_questionNumber/${questions.length}'),
-                ],
-              ),
-              const Divider(
-                thickness: 1,
-                color: Colors.grey,
-              ),
-              Expanded(
-                  child: PageView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: questions.length,
-                controller: _controller,
-                itemBuilder: (context, index) {
-                  final _question = questions[index];
-                  return buildQuestion(_question);
-                },
-              )),
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
   void nextPage() {
-    if (_questionNumber < questions.length) {
+    if (_questionNumber < question3.length) {
       _controller.nextPage(
           duration: const Duration(milliseconds: 250),
           curve: Curves.easeInExpo);
@@ -125,7 +150,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   ElevatedButton buildElevatedButton() {
     return ElevatedButton(
         onPressed: () {
-          if (_questionNumber < questions.length) {
+          if (_questionNumber < question3.length) {
             _controller.nextPage(
                 duration: const Duration(milliseconds: 250),
                 curve: Curves.easeInExpo);
@@ -140,12 +165,12 @@ class _QuestionWidgetState extends State<QuestionWidget> {
                     builder: (context) => ResultPage(score: _score)));
           }
         },
-        child: Text(_questionNumber < questions.length
+        child: Text(_questionNumber < question3.length
             ? 'Next Page'
             : "see the Result"));
   }
 
-  Column buildQuestion(Question question) {
+  Column buildQuestion(QuestionModel question) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -171,7 +196,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               _isLocked = question.isLocked;
               if (question.selectedOption!.isCorrect) {
                 _score++;
-                nextPage();
+                // nextPage();
               }
             }
           },

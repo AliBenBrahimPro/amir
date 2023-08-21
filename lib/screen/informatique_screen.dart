@@ -148,7 +148,8 @@ class _InformatiqueHomeScreenState extends State<InformatiqueHomeScreen>
                                     ),
                                   ];
                                 },
-                                body: Container(
+                                body:
+                                 Container(
                                   color: Colors.white,
                                   child: ListView.builder(
                                     itemCount: cours.length,

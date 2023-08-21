@@ -110,7 +110,8 @@ class _ChapitreLeconState extends State<ChapitreLecon> {
           children: [
             getAppBarUI2(),
             Expanded(
-              child: FutureBuilder<List<Chapitres>>(
+              child:
+               FutureBuilder<List<Chapitres>>(
                   future: chapitresController
                       .getSpecChapitres(widget.idCours),
                   builder: (context, snapshot) {
@@ -153,7 +154,8 @@ class _ChapitreLeconState extends State<ChapitreLecon> {
                                           child: Text(
                                               'somthing went wrong ${snapshot.error}'),
                                         );
-                                      } else if (snapshot.hasData) {
+                                      }
+                                       else if (snapshot.hasData) {
                                         final Random random = new Random();
                                         final lecon = snapshot.data!;
                                         return ListView(

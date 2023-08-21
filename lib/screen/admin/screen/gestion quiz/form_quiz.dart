@@ -2,27 +2,46 @@ import 'package:amir/Services/quiz_service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../../models/question_model.dart';
+class Question {
+  String text;
+  List<String> options;
+  List<int> correctAnswerIndices;
+  List<bool> isCorrect;
 
-class QuestionForm extends StatefulWidget {
-  @override
-  _QuestionFormState createState() => _QuestionFormState();
+  Question({
+    required this.text,
+    required this.options,
+    required this.correctAnswerIndices,
+    required this.isCorrect,
+  });
+  Map<String, dynamic> toJson() {
+    return {
+      'text': text,
+      'options': options.map((option) => option).toList(),
+      'correctAnswerIndices': correctAnswerIndices
+          .map((correctAnswerIndice) => correctAnswerIndice)
+          .toList(),
+    };
+  }
 }
 
-class _QuestionFormState extends State<QuestionForm> {
-  List<Question> questions = [
-    Question(
-      text: '',
-      options: [],
-    )
-  ];
+class QuizBuild extends StatefulWidget {
+  String? idcours;
+  QuizBuild({super.key, this.idcours});
+  @override
+  _QuizBuildState createState() => _QuizBuildState();
+}
 
+class _QuizBuildState extends State<QuizBuild> {
+  List<Question> questions = [
+    Question(text: '', options: [], correctAnswerIndices: [], isCorrect: [])
+  ];
+  List<bool> correct = [false];
+  bool isCorrectAnswer = false;
   void addQuestion() {
     setState(() {
       questions.add(Question(
-        text: '',
-        options: [],
-      ));
+          text: '', options: [], correctAnswerIndices: [], isCorrect: []));
     });
   }
 
@@ -34,13 +53,16 @@ class _QuestionFormState extends State<QuestionForm> {
 
   void addOption(int questionIndex) {
     setState(() {
-      questions[questionIndex].options.add(Option(text: '', isCorrect: false));
+      questions[questionIndex].options.add("");
+      questions[questionIndex].isCorrect.add(false);
     });
   }
 
   void removeOption(int questionIndex, int optionIndex) {
     setState(() {
       questions[questionIndex].options.removeAt(optionIndex);
+
+      questions[questionIndex].isCorrect.removeAt(optionIndex);
     });
   }
 
@@ -56,8 +78,12 @@ class _QuestionFormState extends State<QuestionForm> {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
+              for (var question in questions) {
+                print(question.toJson());
+              }
+
               Map req = {
-                'id_cour': '646e0e83695e6daec7a200be',
+                'id_cour': widget.idcours,
                 'question': questions,
                 "nom_quiz": nomQuizController.text
               };
@@ -142,28 +168,35 @@ class _QuestionFormState extends State<QuestionForm> {
                                   Expanded(
                                     child: TextFormField(
                                       initialValue: questions[questionIndex]
-                                          .options[optionIndex]
-                                          .text,
+                                          .options[optionIndex],
                                       decoration:
                                           InputDecoration(labelText: 'Option'),
                                       onChanged: (value) {
                                         setState(() {
                                           questions[questionIndex]
-                                              .options[optionIndex]
-                                              .text = value;
+                                              .options[optionIndex] = value;
                                         });
                                       },
                                     ),
                                   ),
                                   Checkbox(
                                     value: questions[questionIndex]
-                                        .options[optionIndex]
-                                        .isCorrect,
+                                        .isCorrect[optionIndex],
                                     onChanged: (bool? value) {
                                       setState(() {
                                         questions[questionIndex]
-                                            .options[optionIndex]
-                                            .isCorrect = value!;
+                                            .isCorrect[optionIndex] = value!;
+                                        questions[questionIndex]
+                                                .isCorrect[optionIndex]
+                                            ? questions[questionIndex]
+                                                .correctAnswerIndices
+                                                .add(optionIndex)
+                                            : questions[questionIndex]
+                                                .correctAnswerIndices
+                                                .remove(optionIndex);
+                                        questions[questionIndex]
+                                            .correctAnswerIndices
+                                            .sort();
                                       });
                                     },
                                   ), //Chec
@@ -206,4 +239,3 @@ class _QuestionFormState extends State<QuestionForm> {
     );
   }
 }
-

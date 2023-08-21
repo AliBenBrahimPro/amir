@@ -1,9 +1,11 @@
 import 'package:amir/models/question_model.dart';
 import 'package:flutter/material.dart';
 
+import '../models/quiz_model.dart';
+
 class OptionWidget extends StatefulWidget {
-  final Question question;
-  final ValueChanged<Option> onClickedOption;
+  final QuestionModel question;
+  final ValueChanged<OptionModel> onClickedOption;
   const OptionWidget(
       {super.key, required this.question, required this.onClickedOption});
 
@@ -22,7 +24,7 @@ class _OptionWidgetState extends State<OptionWidget> {
     );
   }
 
-  Widget buildOption(BuildContext context, Option option) {
+  Widget buildOption(BuildContext context, OptionModel option) {
     final color = getColorForOption(option, widget.question);
     return GestureDetector(
       onTap: () => widget.onClickedOption(option),
@@ -48,7 +50,7 @@ class _OptionWidgetState extends State<OptionWidget> {
     );
   }
 
-  Color getColorForOption(Option option, Question question) {
+  Color getColorForOption(OptionModel option, QuestionModel question) {
     final isSelected = option == question.selectedOption;
     if (question.isLocked) {
       if (isSelected) {
@@ -60,7 +62,7 @@ class _OptionWidgetState extends State<OptionWidget> {
     return Colors.grey.shade200;
   }
 
-  Widget getIconForOption(Option option, Question question) {
+  Widget getIconForOption(OptionModel option, QuestionModel question) {
     final isSelected = option == question.selectedOption;
     if (question.isLocked) {
       if (isSelected) {

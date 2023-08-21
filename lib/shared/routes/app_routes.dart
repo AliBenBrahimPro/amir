@@ -12,12 +12,16 @@ import '../../screen/Authentication/Forgot_password/forgotpass.dart';
 import '../../screen/Authentication/Sign_in/sign_in.dart';
 
 import '../../screen/Tabar_screen.dart';
+import '../../screen/admin/screen/gestion quiz/form_quiz.dart';
+import '../../screen/admin/screen/gestion quiz/read_quiz.dart';
+import '../../screen/admin/screen/gestion quiz/select_cour.dart';
 import '../../screen/admin/screen/gestion_screen.dart';
 import '../../screen/admin/screen/home_admin_screen.dart';
 import '../../screen/admin/screen/read_account.dart';
 import '../../screen/enseigne/Home_enseigne.dart';
 import '../../screen/pdfAndVideo.dart';
 import '../../screen/splash_screen/splash_screen.dart';
+import '../../widgets/qustion_widget.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -46,7 +50,9 @@ class Routes {
          case '/gestionadmin':
         return MaterialPageRoute(builder: (_) => GestionAdmin());
         case '/createquiz':
-        return MaterialPageRoute(builder: (_) => CreateQuiz());
+        return MaterialPageRoute(builder: (_) => QuestionForm());
+        case '/selectcour':
+        return MaterialPageRoute(builder: (_) => SelectCours());
 
         
         

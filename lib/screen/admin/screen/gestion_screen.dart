@@ -87,7 +87,7 @@ Provider.of<Auth>(context, listen: false).logout();
                               "0-6", "150"),
                           tutorWidget(
                               "course", "Gestion cours", "/menucours", "0-2", "100"),
-                          tutorWidget("quiz", "Gestion quiz", "/createquiz",
+                          tutorWidget("quiz", "Gestion quiz", "/selectcour",
                               "0-4", "100"),
                         ],
                       ),

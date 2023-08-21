@@ -14,6 +14,8 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'account.dart';
+import 'admin/screen/gestion quiz/menu_quiz.dart';
+import 'admin/screen/gestion quiz/read_quiz.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -29,7 +31,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   static List<Widget> _widgetOptions = <Widget>[
     const CoursScreen(),
     const AllCourse(),
-    const QuestionWidget(),
+     MenuQuiz(),
     const ChatPage(),
      const AccountPage(),
   ];

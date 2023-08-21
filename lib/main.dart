@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+                colorScheme: ColorScheme.fromSwatch().copyWith(primary:const Color(0xffFF69BB)),
+
       ),
       initialRoute: '/',
       onGenerateRoute: Routes.generateRoute,

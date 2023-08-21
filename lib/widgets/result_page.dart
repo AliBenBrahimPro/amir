@@ -6,6 +6,6 @@ class ResultPage extends StatelessWidget {
   final int score;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text('You got $score/${questions.length}')),);
+    return Scaffold(body: Center(child: Text('You got $score')),);
   }
 }
