@@ -41,7 +41,7 @@ class FeatureItem extends StatelessWidget {
         child: Stack(
           children: [
             CustomImage(
-              "http://10.0.2.2:8000/${data.image}",
+              "http://10.0.2.2:3000/${data.image}",
               width: double.infinity,
               height: 190,
               radius: 15,

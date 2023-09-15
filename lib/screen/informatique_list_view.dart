@@ -58,7 +58,7 @@ class InformatiqueListView extends StatelessWidget {
                               child: Container(
                                 color: Colors.white,
                                 child: Image.network(
-                                 "http://10.0.2.2:8000/${informatiqueData?.image}",
+                                 "http://10.0.2.2:3000/${informatiqueData?.image}",
                                   fit: BoxFit.fitHeight,
                                 ),
                               ),

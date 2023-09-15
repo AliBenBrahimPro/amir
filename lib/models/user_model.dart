@@ -1,13 +1,14 @@
 List<UsersModel> userFromJson(dynamic str) =>
     List<UsersModel>.from((str).map((x) => UsersModel.fromJson(x)));
-class UsersModel {
-   String id;
-   String lastName;
-   String firstName;
-   String email;
-   String password;
-   String role;
 
+class UsersModel {
+  String id;
+  String lastName;
+  String firstName;
+  String email;
+  String password;
+  String role;
+  bool select;
 
   UsersModel(
       {required this.id,
@@ -16,19 +17,17 @@ class UsersModel {
       required this.email,
       required this.password,
       required this.role,
-    
-      });
+      this.select = false});
 
   factory UsersModel.fromJson(Map<String, dynamic> json) {
     return UsersModel(
-        id: json['_id'],
-        lastName: json['last_name'],
-        firstName: json['first_name'],
-        email: json['email'],
-        password: json['password'],
-        role: json['role'],
-       
-        );
+      id: json['_id'],
+      lastName: json['last_name'],
+      firstName: json['first_name'],
+      email: json['email'],
+      password: json['password'],
+      role: json['role'],
+    );
   }
 
   toJson() {

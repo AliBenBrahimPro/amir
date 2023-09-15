@@ -67,7 +67,7 @@ class _CoursePageState extends State<CoursePage> {
                       borderRadius: const BorderRadius.all(Radius.circular(30)),
                       image: DecorationImage(
                         image: NetworkImage(
-                            'http://10.0.2.2:8000/${widget.imageUrl}'),
+                            'http://10.0.2.2:3000/${widget.imageUrl}'),
                       )),
                 ),
               ),

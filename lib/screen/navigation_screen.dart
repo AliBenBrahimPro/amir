@@ -2,8 +2,8 @@ import 'package:amir/Services/auth_service.dart';
 import 'package:amir/models/user_model.dart';
 import 'package:amir/screen/ColorScheme.dart';
 import 'package:amir/screen/all_course.dart';
-import 'package:amir/screen/chat.dart';
 import 'package:amir/screen/cours_screen.dart';
+import 'package:amir/screen/enseigne/Pages/chat_page.dart';
 import 'package:amir/screen/informatique_screen.dart';
 import 'package:amir/screen/profile_screen.dart';
 import 'package:amir/screen/three_screen.dart';
@@ -16,25 +16,25 @@ import 'package:provider/provider.dart';
 import 'account.dart';
 import 'admin/screen/gestion quiz/menu_quiz.dart';
 import 'admin/screen/gestion quiz/read_quiz.dart';
+import 'enseigne/Model/chat_model.dart';
 
 class NavigationScreen extends StatefulWidget {
-  const NavigationScreen({super.key});
+  ChatModel sourceChat;
+  String token;
+   String firstName;
+   String lastName;
+   String email;
+      String role;
+
+  NavigationScreen({super.key, required this.sourceChat,required this.token,required this.firstName,required this.lastName,required this.role,required this.email});
 
   @override
   State<NavigationScreen> createState() => _NavigationScreenState();
 }
 
 class _NavigationScreenState extends State<NavigationScreen> {
-
   late List<UsersModel> users = [];
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[
-    const CoursScreen(),
-    const AllCourse(),
-     MenuQuiz(),
-    const ChatPage(),
-     const AccountPage(),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -49,6 +49,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = <Widget>[
+      const CoursScreen(),
+      const AllCourse(),
+      MenuQuiz(),
+      ChatPage(sourceChat: widget.sourceChat, token: widget.token,isProf: false),
+       AccountPage(firstName: widget.firstName,email: widget.email,lastName:widget.lastName ,role:widget.role),
+    ];
     return Scaffold(
       drawer: Drawer(
         child: Consumer<Auth>(builder: (_, auth, child) {
@@ -135,10 +142,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 title: const Text('Quiz'),
                 onTap: () {
                   Navigator.pop(context);
-                   Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) =>  QuestionWidget()),
-  );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => QuestionWidget()),
+                  );
                 },
               ),
               ListTile(

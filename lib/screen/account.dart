@@ -1,15 +1,21 @@
+import 'package:amir/screen/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:amir/theme/color.dart';
 import 'package:amir/utils/data.dart';
 import 'package:amir/widgets/custom_image.dart';
 import 'package:amir/widgets/setting_box.dart';
 import 'package:amir/widgets/setting_item.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../Services/auth_service.dart';
 
 class AccountPage extends StatefulWidget {
-  const AccountPage({Key? key}) : super(key: key);
+  String firstName;
+  String lastName;
+  String email;
+  String role;
+  AccountPage({Key? key, required this.firstName, required this.lastName, required this.email, required this.role}) : super(key: key);
 
   @override
   _AccountPageState createState() => _AccountPageState();
@@ -33,10 +39,7 @@ class _AccountPageState extends State<AccountPage> {
                   backgroundColor: pink,
                   radius: 30,
                   child: Text(
-                    Provider.of<Auth>(context, listen: true)
-                        .user!
-                        .firstName[0]
-                        .toUpperCase(),
+                    widget.firstName[0].toUpperCase(),
                     style: TextStyle(color: Colors.white, fontSize: 25),
                   ),
                 ),
@@ -45,7 +48,7 @@ class _AccountPageState extends State<AccountPage> {
                 height: 10,
               ),
               Text(
-                Provider.of<Auth>(context, listen: true).user!.firstName,
+                widget.firstName,
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ],
@@ -88,13 +91,19 @@ class _AccountPageState extends State<AccountPage> {
                 ),
               ],
             ),
-            child: Column(
-              children: [
+            child: Column(children: [
               SettingItem(
                 title: "Mes informations",
                 leadingIcon: "asset/icons/setting.svg",
                 bgIconColor: blue,
-                onTap: () {},
+                onTap: () {
+                  // ProfileApp
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) => ProfilePage(email:widget.email,firstName:widget.firstName,lastName:widget.lastName,role:widget.role),
+                      ));
+                },
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 45),
@@ -179,7 +188,10 @@ class _AccountPageState extends State<AccountPage> {
                 title: "Déconnecté",
                 leadingIcon: "asset/icons/logout.svg",
                 bgIconColor: darker,
-                onTap: () {},
+                onTap: () {
+                  Provider.of<Auth>(context, listen: false).logout();
+                  Get.offAllNamed("/login");
+                },
               ),
             ]),
           ),

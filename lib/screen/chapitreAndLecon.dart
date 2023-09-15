@@ -74,7 +74,7 @@ class _ChapitreLeconState extends State<ChapitreLecon> {
           SizedBox(
             width: 60,
             height: 60,
-            child: Image.network('http://10.0.2.2:8000/${widget.img}'),
+            child: Image.network('http://10.0.2.2:3000/${widget.img}'),
           )
         ],
       ),

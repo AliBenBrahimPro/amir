@@ -43,7 +43,7 @@ class QuizItem extends StatelessWidget {
         child: Stack(
           children: [
             CustomImage(
-              "https://media.istockphoto.com/id/1186386668/vector/quiz-in-comic-pop-art-style-quiz-brainy-game-word-vector-illustration-design.jpg?s=170667a&w=0&k=20&c=If3x4iLdcCqLkdKpu-QnHQwIfjWIVbtrAd9a6SMrLYk=",
+              "https://thumbs.dreamstime.com/b/quiz-time-concept-speech-bubble-pencil-yellow-background-quiz-time-concept-speech-bubble-pencil-yellow-background-223092987.jpg",
               width: double.infinity,
               height: 190,
               radius: 15,

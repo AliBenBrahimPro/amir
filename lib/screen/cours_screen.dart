@@ -138,7 +138,7 @@ class _CoursScreenState extends State<CoursScreen> {
                       height: 120,
                       decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: NetworkImage('http://10.0.2.2:8000/$img'),
+                              image: NetworkImage('http://10.0.2.2:3000/$img'),
                               fit: BoxFit.contain)),
                     ),
                   ),

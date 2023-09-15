@@ -55,13 +55,13 @@ class CustomImage extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: borderRadius ?? BorderRadius.circular(radius),
                     image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.fitHeight),
+                        image: imageProvider, fit: BoxFit.fitWidth),
                   ),
                 ),
               )
             : Image(
                 image: AssetImage(image),
-                fit: BoxFit.fitHeight,
+                fit: BoxFit.fitWidth,
               ));
   }
 }

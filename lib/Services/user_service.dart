@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
+import '../global/environment.dart';
+
 class UserController {
   List<UsersModel> results = [];
   final _storage = const FlutterSecureStorage();
@@ -56,6 +58,18 @@ class UserController {
       }
     } catch (e) {
       log(e.toString());
+    }
+  }
+    
+
+  Future<List<UsersModel>> getUsersWithoutMe(String id) async {
+    final response = await http.get(Uri.parse('${Environment.apiUrl}/user/withoutme/${id}'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonResponse = json.decode(response.body)['data'];
+      return jsonResponse.map((data) => UsersModel.fromJson(data)).toList();
+    } else {
+      throw Exception('Failed to load users');
     }
   }
 }

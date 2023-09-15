@@ -19,7 +19,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
         backgroundColor: pink,
       ),
       body: Container(
-        child: SfPdfViewer.network('http://10.0.2.2:8000/${widget.pdfFile}'),
+        child: SfPdfViewer.network('http://10.0.2.2:3000/${widget.pdfFile}'),
       ),
     );
   }
